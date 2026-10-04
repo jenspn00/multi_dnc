@@ -1,0 +1,8 @@
+{
+    "port": "socket://192.168.126.254:4001",
+    "baudrate": 9600, 
+    "template": "FANUC",
+    "leader_nulls": 1,
+    "trailer_nulls": 2
+}
+

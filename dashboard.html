@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Maskine Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1 { text-align: center; color: #fff; margin-bottom: 30px; }
+
+        #dashboard {
+            display: flex;
+            flex-direction: column; /* Stacker blokke lodret */
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .machine-card {
+            background-color: #1e1e1e;
+            border-left: 12px solid #555;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .machine-name {
+            font-size: 2em;
+            font-weight: bold;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-badge {
+            font-size: 1.2em;
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 4px;
+            background: #333;
+        }
+
+        .log-message {
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 1.1em;
+            background-color: #000;
+            padding: 15px;
+            border-radius: 5px;
+            color: #ccc;
+            white-space: pre-wrap; /* Sikrer at lange linjer knækker */
+        }
+
+        .timestamp {
+            margin-top: 10px;
+            text-align: right;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* Status farver baseret på loggen */
+        .status-error { 
+            border-left-color: #cf6679; /* Rød */
+        }
+        .status-error .status-badge { color: #cf6679; background: rgba(207, 102, 121, 0.1); }
+
+        .status-warning { 
+            border-left-color: #ffb74d; /* Orange */
+        }
+        .status-warning .status-badge { color: #ffb74d; background: rgba(255, 183, 77, 0.1); }
+
+        .status-info { 
+            border-left-color: #66bb6a; /* Grøn */
+        }
+        .status-info .status-badge { color: #66bb6a; background: rgba(102, 187, 106, 0.1); }
+
+    </style>
+</head>
+<body>
+
+    <h1>System Status</h1>
+    <div id="dashboard">
+        <div style="text-align:center; color:#666;">Venter på data... (Husk at starte serveren)</div>
+    </div>
+
+    <script>
+    // open terminal i folder.
+    // run: python3 -m http.server
+    // go to: http://localhost:8000/dashboard.html
+    
+    
+        const LOG_FILE = 'dnc_system.log';
+        const REFRESH_RATE = 3000; // Opdater hvert 3 .sekund
+
+        async function updateDashboard() {
+            try {
+                // Tilføj timestamp for at undgå at browseren cacher filen
+                const response = await fetch(LOG_FILE + '?t=' + new Date().getTime());
+                if (!response.ok) throw new Error("Logfil ikke fundet");
+                const text = await response.text();
+                parseLog(text);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function parseLog(data) {
+            const lines = data.trim().split('\n');
+            const machines = {};
+
+            // Vi gennemgår alle linjer, så vi ender med den SIDSTE status for hver maskine
+            lines.forEach(line => {
+                if (!line.trim()) return;
+
+                // Format: DATO - [NAVN] - LEVEL - BESKED
+                // Vi splitter på " - "
+                const parts = line.split(' - ');
+
+                if (parts.length >= 4) {
+                    const timestamp = parts[0];
+                    let name = parts[1]; // f.eks. [moxa]
+                    const level = parts[2]; // f.eks. ERROR, INFO
+                    // Hvis beskeden indeholder " - ", samler vi resten igen
+                    const message = parts.slice(3).join(' - ');
+
+                    // Linjer fra hovedprogrammet ("[moxa] Program ... queued") hører til maskinen
+                    const m = message.match(/^\[([^\]]+)\]/);
+                    if (name === '[MainThread]' && m) name = '[' + m[1] + ']';
+
+                    machines[name] = {
+                        timestamp: timestamp,
+                        level: level,
+                        message: message
+                    };
+                }
+            });
+
+            render(machines);
+        }
+
+        function esc(t) {
+            return String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+        }
+
+        function render(machines) {
+            const container = document.getElementById('dashboard');
+            container.innerHTML = '';
+
+            // Sorter maskiner alfabetisk
+            const keys = Object.keys(machines).sort();
+
+            keys.forEach(key => {
+                const machine = machines[key];
+                
+                // Bestem CSS klasse
+                let cssClass = 'status-info'; // Standard grøn
+                if (machine.level.includes('ERROR')) cssClass = 'status-error';
+                else if (machine.level.includes('WARNING')) cssClass = 'status-warning';
+
+                // Fjern klammer [] fra navnet for pænere visning
+                const displayName = key.replace('[', '').replace(']', '');
+
+                const html = `
+                    <div class="machine-card ${cssClass}">
+                        <div class="card-header">
+                            <span class="machine-name">${esc(displayName)}</span>
+                            <span class="status-badge">${esc(machine.level)}</span>
+                        </div>
+                        <div class="log-message">${esc(machine.message)}</div>
+                        <div class="timestamp">Opdateret: ${esc(machine.timestamp)}</div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        // Start loopet
+        setInterval(updateDashboard, REFRESH_RATE);
+        updateDashboard(); // Kør første gang med det samme
+    </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+    "port": "/dev/ttyS0",
+    "template":"FANUC",
+    "baudrate": 9600,
+    "eol": "LF"
+}
+
