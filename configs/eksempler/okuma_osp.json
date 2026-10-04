@@ -1,0 +1,21 @@
+{
+    "_kommentar": "Typiske standardværdier - skal tilpasses maskinens egne parametre. Kopier filen op i configs/ og ret 'port'. Okuma OSP (P200/P300). Indstilles under Optional Parameter (RS-232C). Okuma sender ofte en hovedlinje '$NAVN.MIN%' foran programmet; navnet i hovedlinjen gemmes ikke, så filen navngives efter O-nummeret eller tidspunktet.",
+    "port": "/dev/ttyUSB0",
+    "template": "DEFAULT",
+    "baudrate": 9600,
+    "bytesize": 7,
+    "parity": "E",
+    "stopbits": 2,
+    "xonxoff": true,
+    "rtscts": false,
+    "encoding": "ascii",
+    "start_trigger": "%",
+    "end_trigger": "%",
+    "min_content_length": 3,
+    "rx_timeout": 10,
+    "filename_pattern": "(?m)^(O[A-Z0-9]{1,4})\\b",
+    "request_pattern": "/R/([A-Za-z0-9_]+)",
+    "leader_nulls": 0,
+    "trailer_nulls": 0,
+    "eol": "CRLF"
+}

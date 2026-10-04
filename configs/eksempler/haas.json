@@ -1,0 +1,21 @@
+{
+    "_kommentar": "Typiske standardværdier - skal tilpasses maskinens egne parametre. Kopier filen op i configs/ og ret 'port'. Haas (klassisk og NGC med RS-232). Svarer til Haas Setting 11 (baud), 12 (paritet), 13 (stopbit), 14 (XON/XOFF), 25 (EOB = CR LF), 37 (databit). Program mellem % og %, navn O12345.",
+    "port": "/dev/ttyUSB0",
+    "template": "DEFAULT",
+    "baudrate": 9600,
+    "bytesize": 7,
+    "parity": "E",
+    "stopbits": 1,
+    "xonxoff": true,
+    "rtscts": false,
+    "encoding": "ascii",
+    "start_trigger": "%",
+    "end_trigger": "%",
+    "min_content_length": 3,
+    "rx_timeout": 10,
+    "filename_pattern": "(O\\d{4,5})",
+    "request_pattern": "/R/(O\\d{4,5})",
+    "leader_nulls": 0,
+    "trailer_nulls": 0,
+    "eol": "CRLF"
+}

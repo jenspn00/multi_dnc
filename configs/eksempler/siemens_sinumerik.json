@@ -1,0 +1,21 @@
+{
+    "_kommentar": "Typiske standardværdier - skal tilpasses maskinens egne parametre. Kopier filen op i configs/ og ret 'port'. Siemens Sinumerik 840D/810D/802D/828D (V24/RS-232, hulstrimmelformat '%_N_NAVN_MPF'). Programmet har ingen afsluttende %, så modtagelse stopper på sluttegnet 1A hex (EOF) - slå 'Stop med sluttegn' til i styringens V24-indstillinger. XON=11h, XOFF=13h.",
+    "port": "/dev/ttyUSB0",
+    "template": "SIEMENS",
+    "baudrate": 9600,
+    "bytesize": 8,
+    "parity": "N",
+    "stopbits": 1,
+    "xonxoff": true,
+    "rtscts": false,
+    "encoding": "latin-1",
+    "start_trigger": "%",
+    "end_trigger": "\u001a",
+    "min_content_length": 3,
+    "rx_timeout": 10,
+    "filename_pattern": "_N_([A-Za-z0-9_]+?_(?:MPF|SPF))",
+    "request_pattern": "/R/([A-Za-z0-9_]+)",
+    "leader_nulls": 0,
+    "trailer_nulls": 0,
+    "eol": "LF"
+}

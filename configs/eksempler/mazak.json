@@ -1,0 +1,21 @@
+{
+    "_kommentar": "Typiske standardværdier - skal tilpasses maskinens egne parametre. Kopier filen op i configs/ og ret 'port'. Mazak (Mazatrol Fusion/Matrix/SmoothX, EIA/ISO-programmer). Indstilles under TAPE/DATA I/O-parametrene. Mazatrol-programmer (konversationelle) sendes i et binært format og understøttes IKKE - kun EIA/ISO G-kode.",
+    "port": "/dev/ttyUSB0",
+    "template": "DEFAULT",
+    "baudrate": 9600,
+    "bytesize": 7,
+    "parity": "E",
+    "stopbits": 2,
+    "xonxoff": true,
+    "rtscts": false,
+    "encoding": "ascii",
+    "start_trigger": "%",
+    "end_trigger": "%",
+    "min_content_length": 3,
+    "rx_timeout": 10,
+    "filename_pattern": "(O\\d{4,8})",
+    "request_pattern": "/R/(O\\d{4,8})",
+    "leader_nulls": 0,
+    "trailer_nulls": 0,
+    "eol": "CRLF"
+}
