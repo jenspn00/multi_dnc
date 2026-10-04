@@ -1,0 +1,21 @@
+{
+    "_kommentar": "Typiske standardværdier - skal tilpasses maskinens egne parametre. Kopier filen op i configs/ og ret 'port'. Mitsubishi Meldas/M70/M80 (ISO-kode). Svarer til parametrene #9101-#9113 (baud, stopbit, paritet, tegnlængde, handshake). Program mellem % og %, navn O-nummer.",
+    "port": "/dev/ttyUSB0",
+    "template": "DEFAULT",
+    "baudrate": 9600,
+    "bytesize": 7,
+    "parity": "E",
+    "stopbits": 2,
+    "xonxoff": true,
+    "rtscts": false,
+    "encoding": "ascii",
+    "start_trigger": "%",
+    "end_trigger": "%",
+    "min_content_length": 3,
+    "rx_timeout": 10,
+    "filename_pattern": "(O\\d{4,8})",
+    "request_pattern": "/R/(O\\d{4,8})",
+    "leader_nulls": 0,
+    "trailer_nulls": 0,
+    "eol": "CRLF"
+}

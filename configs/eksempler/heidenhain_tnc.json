@@ -1,0 +1,21 @@
+{
+    "_kommentar": "Typiske standardværdier - skal tilpasses maskinens egne parametre. Kopier filen op i configs/ og ret 'port'. Heidenhain TNC (klartekst-programmer, BEGIN PGM/END PGM). Interface-mode EXT1/EXT2 eller 'FE' ved V.24/RS-232. Kun klartekst; ISO-programmer (.I) på Heidenhain bruger %-format - brug så template DEFAULT.",
+    "port": "/dev/ttyUSB0",
+    "template": "HEIDENHAIN",
+    "baudrate": 9600,
+    "bytesize": 7,
+    "parity": "E",
+    "stopbits": 1,
+    "xonxoff": true,
+    "rtscts": false,
+    "encoding": "ascii",
+    "start_trigger": "BEGIN PGM",
+    "end_trigger": "END PGM",
+    "min_content_length": 10,
+    "rx_timeout": 10,
+    "filename_pattern": "BEGIN PGM ([A-Za-z0-9_]+)",
+    "request_pattern": "CALL PGM ([A-Za-z0-9_]+)",
+    "leader_nulls": 0,
+    "trailer_nulls": 0,
+    "eol": "CRLF"
+}
